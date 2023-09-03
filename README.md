@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/cnsfeir/cumplo-accountant/assets/58790635/1b13d8c2-cc32-49c7-8d03-706a24421547" width="450"/>
+  <img src="https://github.com/cnsfeir/cumplo-accountant/assets/58790635/1b13d8c2-cc32-49c7-8d03-706a24421547" height="141"/>
 </div>
 
 <br>
