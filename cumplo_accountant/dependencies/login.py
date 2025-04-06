@@ -24,8 +24,8 @@ def login(request: Request) -> None:
 
     """
     user = cast(User, request.state.user)
-    if not user.credentials:
-        raise HTTPException(HTTPStatus.BAD_REQUEST, detail="No Cumplo credentials configured")
+    if not user.credentials or not user.credentials.valid:
+        raise HTTPException(HTTPStatus.BAD_REQUEST, detail="No valid Cumplo credentials configured")
 
     if user.session and not user.session.has_expired:
         logger.debug(f"User {user.id} already has a valid session")
@@ -36,6 +36,8 @@ def login(request: Request) -> None:
         token, _ = CumploGlobalAPI.login(user.credentials.email, user.credentials.decrypted_password)
     except Exception as exception:
         logger.warning(f"User {user.id} credentials are invalid: {exception}")
+        user.credentials.valid = False
+        firestore.client.users.update(user, "credentials")
         raise HTTPException(HTTPStatus.BAD_REQUEST, detail="Invalid credentials") from exception
 
     user.session = Session(token=token)
